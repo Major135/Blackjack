@@ -42,17 +42,19 @@ public class Gui extends JPanel {
 	public void render(Graphics g) {
 		super.paintComponents(g);
 		g = (Graphics) panel.getGraphics();
-//		g.setColor(new Color(0).CYAN);
-//		g.drawRect(20, 20, 40, 40);
 		int x = 0;
 		BufferedImage[] img = blackjack.gibTex();
-//		g.drawImage(img[0], 20, 50, 125, 181, null);
-//		g.drawImage(img[1], x += 20, 50, 125, 181, null);
-		for (int i = 0; i < img.length; i++) {
-			g.drawImage(img[i], x += 20, 50, 125, 181, this);
 
+//		for (int i = 0; i < img.length; i++) {
+//			g.drawImage(img[i], x += 20, 50, 125, 181, this);
+//		}
+		for (Karten karte : blackjack.gibBild()) {
+//			BufferedImage img1 = karte.getTex();
+//			g.drawImage(img1, x += 20, 250, 125, 181, this);
+			karte.render(g);
 		}
-		repaint();
+		Spieler spieler = blackjack.getSpieler(0);
+		spieler.render(g);
 	}
 
 	public boolean isBereit() {
