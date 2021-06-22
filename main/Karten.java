@@ -22,6 +22,7 @@ public class Karten {
 		this.y = y;
 		this.width = 125;
 		this.height = 181;
+	
 	}
 
 	public void render(Graphics g) {
@@ -52,6 +53,10 @@ public class Karten {
 
 	public BufferedImage getTex() {
 		return tex;
+	}
+
+	public void setTex(BufferedImage tex) {
+		this.tex = tex;
 	}
 
 	public void setX(int x) {

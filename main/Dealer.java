@@ -1,9 +1,16 @@
 package main;
 
-public class Dealer {
+import java.util.ArrayList;
 
-	public Dealer() {
-		// Braucht auch eine Hand
+public class Dealer extends Spieler {
+	private Hand hand;
+
+	public Dealer(Blackjack blackjack, int pSpielerId, String pName, ArrayList<Deck> deck, int pAnzahl) {
+		super(blackjack, pSpielerId, pName, deck, pAnzahl);
+//		System.out.println("Dealerhand");
+		y = 50;
+		anzahl = 1;
+		System.out.println("Dealer erstellt");
 	}
 
 }
