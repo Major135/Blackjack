@@ -28,7 +28,7 @@ public class Hand {
 			handkarten.add(deck.get(0).getKarte(0));
 			deck.get(0).deleteKarte(0);
 //			System.out.println(handkarten.get(i).getWert());
-			System.out.println(handkarten.get(i).getName());
+//			System.out.println(handkarten.get(i).getName());
 		}
 		berechneSumme();
 	}
@@ -45,7 +45,7 @@ public class Hand {
 			summe = 0;
 			handkarten.add(deck.get(0).getKarte(0));
 			berechneSumme();
-			System.out.println("SpielerSumme" + summe);
+//			System.out.println("SpielerSumme" + summe);
 			deck.get(0).deleteKarte(0);
 			counter++;
 		}
@@ -56,7 +56,7 @@ public class Hand {
 			summe = 0;
 			handkarten.add(deck.get(0).getKarte(0));
 			berechneSumme();
-			System.out.println("DealerSumme" + summe);
+//			System.out.println("DealerSumme" + summe);
 			deck.get(0).deleteKarte(0);
 			counter++;
 		}
@@ -74,14 +74,14 @@ public class Hand {
 		for (Karten hk : handkarten) {
 			if (hk.getWert() == 11 && summe > 21 && !spieler.isStand()) {
 				hk.setWert(1);
-				System.out.println("Wert verändert für Spieler");
+//				System.out.println("Wert verändert für Spieler");
 				summe = 0;
 				berechneSumme();
 				assWert = true;
 			}
 			if (hk.getWert() == 11 && summe > 21 && spieler.isStand()) {
 				hk.setWert(1);
-				System.out.println("Wert verändert für Dealer");
+//				System.out.println("Wert verändert für Dealer");
 				summe = 0;
 				berechneSumme();
 				assWert = true;

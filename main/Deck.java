@@ -80,11 +80,11 @@ public class Deck {
 			karte.set(a, karte.get(b));
 			karte.set(b, sdKarte);
 		}
-		for (Karten k : karte) {
+//		for (Karten k : karte) {
 //			System.out.println("Dein Kartenwert: " + k.getWert());
 //			System.out.println("Dein Kartenmuster: " + k.getMuster());
-			System.out.println("Dein KartenName: " + k.getName() + "" + k.getMuster());
-		}
+//			System.out.println("Dein KartenName: " + k.getName() + "" + k.getMuster());
+//		}
 
 	}
 

@@ -18,6 +18,8 @@ public class Texturen {
 			p6, p5, p4, p3, p2, ap, bp, kp, qp };
 	private char[] bez = { 'a', 'b', 'k', 'q' };
 	private Blackjack blackjack;
+	private BufferedImage einstellungen;
+
 
 	public Texturen(Blackjack blackjack) {
 		this.blackjack = blackjack;
@@ -26,13 +28,15 @@ public class Texturen {
 
 // ASS , BUBE ; KÖNIG ; DAME! 10 ,23 ,36, 49
 	public void holTexturen() {
-		System.out.println("Texturen holen");
+//		System.out.println("Texturen holen");
 		String speicher;
 		URL pic_url = null;
 		int zähler = 0;
 		try {
 			pic_url = this.getClass().getClassLoader().getResource("karten/backside.png");
 			backside = ImageIO.read(pic_url);
+			pic_url = this.getClass().getClassLoader().getResource("karten/einstellungen.png");
+			einstellungen = ImageIO.read(pic_url);
 			pic_url = this.getClass().getClassLoader().getResource("karten/50.png");
 			chip50 = ImageIO.read(pic_url);
 			pic_url = this.getClass().getClassLoader().getResource("karten/100.png");
@@ -164,4 +168,8 @@ public class Texturen {
 	public BufferedImage getChip500() {
 		return chip500;
 	}
+	public BufferedImage getEinstellungen() {
+		return einstellungen;
+	}
+
 }

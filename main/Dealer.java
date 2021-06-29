@@ -10,7 +10,6 @@ public class Dealer extends Spieler {
 //		System.out.println("Dealerhand");
 		y = 50;
 		anzahl = 1;
-		System.out.println("Dealer erstellt");
 	}
 
 }

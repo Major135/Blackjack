@@ -32,7 +32,7 @@ public class Chips {
 	public int trefferBoxGetroffen(int x, int y) {
 		Rectangle rect = new Rectangle(x, y, 1, 1);
 		if (hitbox.intersects(rect)) {
-			System.out.println("Getroffen");
+//			System.out.println("Getroffen");
 			return wert;
 		}
 		return 0;

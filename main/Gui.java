@@ -6,27 +6,20 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class Gui extends JFrame implements ActionListener {
 
 	private JFrame frame;
-	private JLabel spielerLbl;
-	private JLabel dealerLbl;
+	private JLabel spielerLbl, dealerLbl, bankLbl, einsatzLbl, zählstrategie;
 	private Blackjack blackjack;
 	private boolean bereit = false;
-	private JButton ziehen;
-	private JButton stand;
-	private JButton neuesSpiel;
-	private JButton einsatzBestaetigt;
+	private JButton ziehen, stand, neuesSpiel, ausloeschen, einsatzBestaetigt;
 	private Render render;
 	private MouseListener mouse;
-	private boolean enable = false;;
+	private boolean bestaetigt = false;
 
 	public Gui(Blackjack blackjack) {
 		this.blackjack = blackjack;
@@ -56,6 +49,18 @@ public class Gui extends JFrame implements ActionListener {
 		dealerLbl = new JLabel();
 		dealerLbl.setBounds(580, 250, 100, 20);
 
+		zählstrategie = new JLabel(
+				"<html>2,3,4,5,6 = +1 <br> 7,8,9 = 0 </br> <br>J,D,K,A = -1</br> <br></br><br>Aktueller Wert: 0</br></html>");
+		zählstrategie.setBounds(1000, 20, 100, 100);
+		zählstrategie.setOpaque(true);
+		zählstrategie.setBackground(Color.lightGray);
+		zählstrategie.setVisible(false);
+
+		bankLbl = new JLabel("Bank: 1000$");
+		bankLbl.setBounds(120, 875, 100, 20);
+		einsatzLbl = new JLabel("Einsatz: 0$");
+		einsatzLbl.setBounds(550, 500, 100, 20);
+
 		ziehen = new JButton("Karte Ziehen");
 		ziehen.setBounds(850, 300, 200, 100);
 		ziehen.addActionListener(this);
@@ -75,12 +80,22 @@ public class Gui extends JFrame implements ActionListener {
 		einsatzBestaetigt.setBounds(50, 600, 200, 100);
 		einsatzBestaetigt.addActionListener(this);
 		einsatzBestaetigt.setVisible(true);
+
+		ausloeschen = new JButton("Einsatz AUSLÖSCHEN");
+		ausloeschen.setBounds(50, 720, 200, 100);
+		ausloeschen.addActionListener(this);
+		ausloeschen.setVisible(true);
+
 		neuesSpiel.setEnabled(false);
 		stand.setEnabled(false);
 		ziehen.setEnabled(false);
 
 		frame.add(spielerLbl);
 		frame.add(dealerLbl);
+		frame.add(zählstrategie);
+		frame.add(einsatzLbl);
+		frame.add(bankLbl);
+		frame.add(ausloeschen);
 		frame.add(stand);
 		frame.add(neuesSpiel);
 		frame.add(ziehen);
@@ -112,11 +127,11 @@ public class Gui extends JFrame implements ActionListener {
 	}
 
 	private void render(Graphics g) {
-		if (enable) {
+		if (bestaetigt) {
 			for (Spieler sp : blackjack.getSpieler()) {
 				sp.render(g);
 			}
-		} 
+		}
 		blackjack.render(g);
 	}
 
@@ -131,28 +146,38 @@ public class Gui extends JFrame implements ActionListener {
 		}
 		if (stand == e.getSource()) {
 			blackjack.stehenBleiben();
-			neuesSpiel.setEnabled(true);
-			ziehen.setEnabled(false);
+			stehenBleibenButtonsDisable();
 			blackjack.zähleKarten();
 		}
 		if (neuesSpiel == e.getSource()) {
-			System.out.println("Neues Spiel");
+//			System.out.println("Neues Spiel");
 			blackjack.neuesSpiel();
 			neuesSpiel.setEnabled(false);
 			stand.setEnabled(false);
 			ziehen.setEnabled(false);
 			einsatzBestaetigt.setEnabled(true);
+			ausloeschen.setEnabled(true);
 			dealerLbl.setText("");
 			spielerLbl.setText("");
+			einsatzLbl.setText("Einsatz: 0$");
 		}
 		if (einsatzBestaetigt == e.getSource()) {
 			stand.setEnabled(true);
 			ziehen.setEnabled(true);
+			ausloeschen.setEnabled(false);
 			einsatzBestaetigt.setEnabled(false);
-			enable = true;
+			bestaetigt = true;
 			blackjack.einsatzBestaetigt();
 		}
+		if (ausloeschen == e.getSource()) {
+			blackjack.einsatzAusloeschen();
+		}
+	}
 
+	public void stehenBleibenButtonsDisable() {
+		neuesSpiel.setEnabled(true);
+		stand.setEnabled(false);
+		ziehen.setEnabled(false);
 	}
 
 	public JLabel getSpielerLbl() {
@@ -163,12 +188,24 @@ public class Gui extends JFrame implements ActionListener {
 		return dealerLbl;
 	}
 
-	public boolean isEnable() {
-		return enable;
+	public JLabel getBankLbl() {
+		return bankLbl;
 	}
 
-	public void setEnable(boolean enable) {
-		this.enable = enable;
+	public JLabel getEinsatzLbl() {
+		return einsatzLbl;
+	}
+
+	public boolean isBestaetigt() {
+		return bestaetigt;
+	}
+
+	public void setBestaetigt(boolean enable) {
+		this.bestaetigt = enable;
+	}
+
+	public JLabel getZählstrategie() {
+		return zählstrategie;
 	}
 
 }

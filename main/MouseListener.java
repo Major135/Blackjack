@@ -19,7 +19,7 @@ public class MouseListener implements java.awt.event.MouseListener {
 	public void mousePressed(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		System.out.println("X "+x+"Y "+y);
+//		System.out.println("X "+x+"Y "+y);
 		blackjack.mousePressed(x, y);
 	}
 
@@ -31,14 +31,13 @@ public class MouseListener implements java.awt.event.MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

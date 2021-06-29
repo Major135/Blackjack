@@ -27,7 +27,7 @@ public class Spieler {
 
 	public void init() {
 		hand = new Hand(this, deck);
-		zähl = new Zählstrategie(hand);
+		zähl = new Zählstrategie(hand, blackjack, null, 1000,20);
 		y = 700;
 		geld = 1000;
 		gesamteinsatz = 0;
@@ -37,35 +37,39 @@ public class Spieler {
 
 	public void zug() {
 		while (hand.getSumme() < 17) {
-			System.out.println(hand.getSumme());
+//			System.out.println(hand.getSumme());
 			karteZiehen();
 		}
 
 	}
 
-	public void einsatzMachen(int einsatz) {
-		gesamteinsatz += einsatz;
-		geld -= einsatz;
-		System.out.println("GELD " + geld);
+	public int einsatzMachen(int einsatz) {
+		if (geld-einsatz>=0) {
+			gesamteinsatz += einsatz;
+			geld -= einsatz;
+		}
+		return gesamteinsatz;
+		//Label
 	}
 
-	public void gesamtEinsatz() {
-		System.out.println("Gesamtzeinsatz " + gesamteinsatz);
-	}
 
 	public void chipsGewonnen() {
 		if (blackjack.isGewonnen()) {
 			geld += gesamteinsatz * 2;
 			gesamteinsatz = 0;
-			System.out.println("Neuer Kontostand " + geld);
+//			System.out.println("Neuer Kontostand " + geld);
 		}
 		if (!blackjack.isGewonnen()) {
 			gesamteinsatz = 0;
-			System.out.println("Neuer Kontostand " + geld);
+//			System.out.println("Neuer Kontostand " + geld);
 		}
 	}
 
-
+	public int handZählen() {
+		zählsumme = 0;
+		zähl.gibKartenWerte();
+		return zählsumme += zähl.getZähler();
+	}
 	public void updateLabel() {
 		blackjack.updateLabel(spielerId, hand.getSumme());
 	}
@@ -97,11 +101,6 @@ public class Spieler {
 		ziehen(anzahl);
 	}
 
-	public int handZählen() {
-		zählsumme = 0;
-		zähl.gibKartenWerte();
-		return zählsumme += zähl.getZähler();
-	}
 
 	public int getSpielerId() {
 		return spielerId;
@@ -125,5 +124,21 @@ public class Spieler {
 
 	public int getZählsumme() {
 		return zählsumme;
+	}
+
+	public int getGeld() {
+		return geld;
+	}
+
+	public void setGeld(int geld) {
+		this.geld = geld;
+	}
+
+	public void setGesamteinsatz(int gesamteinsatz) {
+		this.gesamteinsatz = gesamteinsatz;
+	}
+
+	public int getGesamteinsatz() {
+		return gesamteinsatz;
 	}
 }
