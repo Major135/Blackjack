@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Deck {
 
 	private ArrayList<Karten> karte;
+	private Ablagestapel ablage;
 	private Blackjack blackjack;
 	private int deckid;
 	private boolean voll;
@@ -23,6 +24,7 @@ public class Deck {
 		int x = 40;
 		int y = 100;
 		karte = new ArrayList<Karten>();
+		ablage = new Ablagestapel(this);
 		int ctr = 0;
 		for (int i = 10; i > 1; i--) {
 			karte.add(new Karten("Herz", "Herz " + i, i, deckid, tex.getHerz(ctr), x += 20, y));
@@ -89,11 +91,11 @@ public class Deck {
 	}
 
 	public void pruefeVoll() {
-		if (karte.size() > 1) {
-			voll = true;
-		} else {
-			voll = false;
-			auffuellen();
+		if (karte.isEmpty()) {
+//			System.out.println("KARTENLEEER");
+			for (int i = 0; i < ablage.getAblage().size(); i++) {
+				karte.add(ablage.getAblage(i));   
+			}
 		}
 	}
 
@@ -103,8 +105,8 @@ public class Deck {
 		}
 	}
 
-	public void auffuellen() {
-		// Vom Ablagestapel auffüllen ins richtige Deck
+	public void auffuellen(Karten karten) {
+		ablage.auffuellen(karten);
 	}
 
 	public int getDeckid() {

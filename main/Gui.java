@@ -1,14 +1,19 @@
 package main;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
 
 public class Gui extends JFrame implements ActionListener {
 
@@ -45,21 +50,25 @@ public class Gui extends JFrame implements ActionListener {
 
 	private void hinzufuegenJComponent() {
 		spielerLbl = new JLabel();
-		spielerLbl.setBounds(580, 620, 100, 20);
+		spielerLbl.setBounds(550, 620, 200, 20);
+		spielerLbl.setFont(new Font("Serif", Font.PLAIN, 24));
 		dealerLbl = new JLabel();
-		dealerLbl.setBounds(580, 250, 100, 20);
+		dealerLbl.setBounds(550, 250, 200, 20);
+		dealerLbl.setFont(new Font("Serif", Font.PLAIN, 24));
 
-		zählstrategie = new JLabel(
-				"<html>2,3,4,5,6 = +1 <br> 7,8,9 = 0 </br> <br>J,D,K,A = -1</br> <br></br><br>Aktueller Wert: 0</br></html>");
-		zählstrategie.setBounds(1000, 20, 100, 100);
+		zählstrategie = new JLabel("<html>2,3,4,5,6 = +1 <br> 7,8,9 = 0 </br> <br>J,D,K,A = -1</br> <br></br><br>Aktueller Wert: 0</br></html>");
+		zählstrategie.setBounds(800, 20, 300, 250);
+		zählstrategie.setFont(new Font("Serif", Font.PLAIN, 24));
 		zählstrategie.setOpaque(true);
 		zählstrategie.setBackground(Color.lightGray);
 		zählstrategie.setVisible(false);
 
 		bankLbl = new JLabel("Bank: 1000$");
-		bankLbl.setBounds(120, 875, 100, 20);
+		bankLbl.setBounds(50, 850, 200, 50);
+		bankLbl.setFont(new Font("Serif", Font.PLAIN, 36));
 		einsatzLbl = new JLabel("Einsatz: 0$");
-		einsatzLbl.setBounds(550, 500, 100, 20);
+		einsatzLbl.setBounds(500,525, 200, 50);
+		einsatzLbl.setFont(new Font("Serif", Font.PLAIN, 24));
 
 		ziehen = new JButton("Karte Ziehen");
 		ziehen.setBounds(850, 300, 200, 100);

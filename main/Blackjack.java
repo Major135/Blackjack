@@ -7,6 +7,7 @@ public class Blackjack {
 
 	private ArrayList<Deck> deck;
 	private ArrayList<Spieler> spieler;
+	private ArrayList<Chips> chipliste;
 	private Chips[] chips = new Chips[3];
 	private Z‰hlstrategie z‰hl;
 	private Gui gui;
@@ -17,6 +18,7 @@ public class Blackjack {
 	private Dealer dealer;
 	private boolean gewonnen, z‰hlsichtbar;
 	private int zwischenSumme;
+	private int x1, y50, y100, y500;
 
 	public static void main(String[] args) {
 		new Blackjack();
@@ -33,10 +35,15 @@ public class Blackjack {
 		chips[0] = new Chips(texturen.getChip50(), 50, 0, 50);
 		chips[1] = new Chips(texturen.getChip100(), 50, 200, 100);
 		chips[2] = new Chips(texturen.getChip500(), 50, 400, 500);
-		z‰hl = new Z‰hlstrategie(null, this, texturen.getEinstellungen(), 1000, 20);
+		chipliste = new ArrayList<Chips>();
+		z‰hl = new Z‰hlstrategie(null, this, texturen.getZ‰hlstrategie(), 1000, 20);
 		spieler = new ArrayList<Spieler>();
 		gui = new Gui(this);
 		zwischenSumme = 0;
+		y50 = 425;
+		y100 = 425;
+		y500 = 425;
+		x1 = 485;
 	}
 
 	private void neuerSpieler() {
@@ -59,15 +66,31 @@ public class Blackjack {
 			gui.setBestaetigt(false);
 		}
 		schlieﬂeZ‰hl();
+		chipClear();
 	}
 
 	public void mousePressed(int x, int y) {
 		if (!gui.isBestaetigt()) {
 			for (int i = 0; i < chips.length; i++) {
+				if (chips[i].trefferBoxGetroffen(x, y) == 50 && spieler.get(1).getGeld() >= 50) {
+					chipliste.add(new Chips(texturen.getChip50(), x1 - 100, y50 -= 10, 0));
+
+				}
+				if (chips[i].trefferBoxGetroffen(x, y) == 100 && spieler.get(1).getGeld() >= 100) {
+					chipliste.add(new Chips(texturen.getChip100(), x1 - 25 + 20, y100 -= 10, 0));
+				}
+				if (chips[i].trefferBoxGetroffen(x, y) == 500 && spieler.get(1).getGeld() >= 500) {
+					chipliste.add(new Chips(texturen.getChip500(), x1 + 50 + 40, y500 -= 10, 0));
+				}
 				setEinsatzLabel(spieler.get(1).einsatzMachen(chips[i].trefferBoxGetroffen(x, y)));
 				setBankLabel(spieler.get(1).getGeld());
 			}
-		}else {
+			if (!chipliste.isEmpty()) {
+				chipliste.get(chipliste.size() - 1).setHeight(85);
+				chipliste.get(chipliste.size() - 1).setWidth(100);
+			}
+
+		} else {
 			z‰hl.trefferBoxGetroffen(x, y);
 		}
 
@@ -84,45 +107,52 @@ public class Blackjack {
 	}
 
 	private void ermittleSieger() {
+		if (spieler.get(1).getSumme() > 21) {
+			verloren();
+		}
 		if (spieler.get(0).getSumme() <= 21 && spieler.get(0).getSumme() > spieler.get(1).getSumme()) {
-			gui.getDealerLbl().setText("Gewonnen " + String.valueOf(spieler.get(0).getSumme()));
-			gui.getSpielerLbl().setText("Verloren " + String.valueOf(spieler.get(1).getSumme()));
-			setGewonnen(false);
-			spieler.get(1).chipsGewonnen();
+			verloren();
 		}
 		if (spieler.get(0).getSumme() == spieler.get(1).getSumme()) {
 			gui.getDealerLbl().setText("Unentschieden " + String.valueOf(spieler.get(0).getSumme()));
 			gui.getSpielerLbl().setText("Unentschieden " + String.valueOf(spieler.get(1).getSumme()));
-			spieler.get(1).chipsGewonnen();
+			einsatzAusloeschen();
 		}
-		if (spieler.get(0).getSumme() < spieler.get(1).getSumme() && spieler.get(1).getSumme() <= 21
-				|| spieler.get(0).getSumme() > 21) {
-			gewonnenLabel();
-			extracted();
+		if (spieler.get(0).getSumme() < spieler.get(1).getSumme() && spieler.get(1).getSumme() <= 21) {
+			gewonnen();
 		}
+
 		setBankLabel(spieler.get(1).getGeld());
 	}
 
-//STRG 1 f¸r Extracted
-	private void extracted() {
-		setGewonnen(true);
+	private void verloren() {
+		gui.getDealerLbl().setText("Gewonnen " + String.valueOf(spieler.get(0).getSumme()));
+		gui.getSpielerLbl().setText("Verloren " + String.valueOf(spieler.get(1).getSumme()));
+		setGewonnen(false);
 		spieler.get(1).chipsGewonnen();
 	}
 
-	private void gewonnenLabel() {
+//STRG 1 f¸r Extracted
+	private void gewonnen() {
 		gui.getDealerLbl().setText("Verloren " + String.valueOf(spieler.get(0).getSumme()));
 		gui.getSpielerLbl().setText("Gewonnen " + String.valueOf(spieler.get(1).getSumme()));
+		setGewonnen(true);
+		spieler.get(1).chipsGewonnen();
 	}
 
 	public void render(Graphics g) {
 		for (int i = 0; i < chips.length; i++) {
 			chips[i].render(g);
 		}
+		for (Chips chips : chipliste) {
+			chips.render(g);
+		}
 		if (!gui.isBestaetigt()) {
 			g.drawImage(texturen.getBackside(), 485, 50, 125, 181, null);
 			g.drawImage(texturen.getBackside(), 485, 700, 125, 181, null);
 			g.drawImage(texturen.getBackside(), 505, 700, 125, 181, null);
 		}
+
 		z‰hl.render(g);
 	}
 
@@ -140,6 +170,14 @@ public class Blackjack {
 			updateZ‰hl();
 		}
 
+	}
+
+	public void chipClear() {
+		chipliste.clear();
+		y50 = 425;
+		y100 = 425;
+		y500 = 425;
+		x1 = 485;
 	}
 
 	public void einsatzBestaetigt() {
@@ -180,6 +218,7 @@ public class Blackjack {
 		spieler.get(1).setGesamteinsatz(0);
 		setBankLabel(spieler.get(1).getGeld());
 		setEinsatzLabel(spieler.get(1).getGesamteinsatz());
+		chipClear();
 	}
 
 	public void stehenBleiben() {
@@ -209,5 +248,4 @@ public class Blackjack {
 		gui.getZ‰hlstrategie().setVisible(false);
 		z‰hlsichtbar = false;
 	}
-
 }

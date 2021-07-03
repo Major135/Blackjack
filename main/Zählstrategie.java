@@ -63,9 +63,9 @@ public class Zählstrategie {
 	public void render(Graphics g) {
 		g.drawImage(tex, x, y, width, height, null);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.draw(hitbox);
+//		g2d.draw(hitbox); // Hitbox von Zählstrategie Button
 		if (da) {
-			g2d.draw(rect);
+//			g2d.draw(rect);  // Mousecursor 
 		}
 	}
 

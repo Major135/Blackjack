@@ -25,6 +25,7 @@ public class Hand {
 
 	public void erstelleHand(int anz) {
 		for (int i = 0; i < anz; i++) {
+			deck.get(0).pruefeVoll();
 			handkarten.add(deck.get(0).getKarte(0));
 			deck.get(0).deleteKarte(0);
 //			System.out.println(handkarten.get(i).getWert());
@@ -43,6 +44,7 @@ public class Hand {
 	public void karteDazuSpieler() {
 		if (summe < 21) {
 			summe = 0;
+			deck.get(0).pruefeVoll();
 			handkarten.add(deck.get(0).getKarte(0));
 			berechneSumme();
 //			System.out.println("SpielerSumme" + summe);
@@ -54,6 +56,7 @@ public class Hand {
 	public void karteDazuDealer() {
 		if (summe < 17 || summe > 21) {
 			summe = 0;
+			deck.get(0).pruefeVoll();
 			handkarten.add(deck.get(0).getKarte(0));
 			berechneSumme();
 //			System.out.println("DealerSumme" + summe);
@@ -90,6 +93,9 @@ public class Hand {
 	}
 
 	public void hkloeschen() {
+		for (Karten hk : handkarten) {
+			deck.get(0).auffuellen(hk);
+		}
 		handkarten.clear();
 		summe = 0;
 	}

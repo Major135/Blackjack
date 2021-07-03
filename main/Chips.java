@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 public class Chips {
 	private BufferedImage tex;
-	private static int width, height; //Klassenattribute
+	private int width, height; // Klassenattribute
 	private int x, y;
 	private Rectangle hitbox;
 	private int wert;
@@ -22,17 +22,16 @@ public class Chips {
 		hitbox = new Rectangle(x, y, width, height);
 	}
 
-
 	public void render(Graphics g) {
 		g.drawImage(tex, x, y, width, height, null);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.draw(hitbox);
+//		g2d.draw(hitbox); //Hitbox für die Chips
 	}
 
 	public int trefferBoxGetroffen(int x, int y) {
 		Rectangle rect = new Rectangle(x, y, 1, 1);
 		if (hitbox.intersects(rect)) {
-//			System.out.println("Getroffen");
+//			 System.out.println("Getroffen");
 			return wert;
 		}
 		return 0;
@@ -41,4 +40,21 @@ public class Chips {
 	public int getWert() {
 		return wert;
 	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
 }
