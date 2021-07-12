@@ -8,7 +8,6 @@ public class Deck {
 	private Ablagestapel ablage;
 	private Blackjack blackjack;
 	private int deckid;
-	private boolean voll;
 	private Texturen tex;
 	private String[] bez = { "Herz", "Kreuz", "Karo", "Pik" };
 
@@ -92,9 +91,10 @@ public class Deck {
 
 	public void pruefeVoll() {
 		if (karte.isEmpty()) {
+			blackjack.setZwischenSumme(0);
 //			System.out.println("KARTENLEEER");
 			for (int i = 0; i < ablage.getAblage().size(); i++) {
-				karte.add(ablage.getAblage(i));   
+				karte.add(ablage.getAblage(i));
 			}
 		}
 	}

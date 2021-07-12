@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -8,7 +9,7 @@ import javax.imageio.ImageIO;
 
 public class Texturen {
 
-	public BufferedImage backside, chip50, chip100, chip500;
+	public BufferedImage backside, chip50, chip100, chip500, zählstrategie, bank, allIn, x1,x2, x3, x4, x5;
 	public BufferedImage h10, h9, h8, h7, h6, h5, h4, h3, h2, ah, kh, bh, qh; // Herzkarten
 	public BufferedImage k10, k9, k8, k7, k6, k5, k4, k3, k2, ak, bk, kk, qk;// Kreuzkarten
 	public BufferedImage ka10, ka9, ka8, ka7, ka6, ka5, ka4, ka3, ka2, aka, bka, kka, qka;// Karokarten
@@ -18,12 +19,15 @@ public class Texturen {
 			p6, p5, p4, p3, p2, ap, bp, kp, qp };
 	private char[] bez = { 'a', 'b', 'k', 'q' };
 	private Blackjack blackjack;
-	private BufferedImage zählstrategie;
-
 
 	public Texturen(Blackjack blackjack) {
 		this.blackjack = blackjack;
-		holTexturen();
+		try {
+			holTexturen();
+		} catch (Exception e) {
+			System.out.println("Keine Texturen");
+		}
+
 	}
 
 // ASS , BUBE ; KÖNIG ; DAME! 10 ,23 ,36, 49
@@ -33,8 +37,20 @@ public class Texturen {
 		URL pic_url = null;
 		int zähler = 0;
 		try {
+			pic_url = this.getClass().getClassLoader().getResource("karten/1x.png");
+			x1 = ImageIO.read(pic_url);
+			pic_url = this.getClass().getClassLoader().getResource("karten/2x.png");
+			x2 = ImageIO.read(pic_url);
+			pic_url = this.getClass().getClassLoader().getResource("karten/3x.png");
+			x3 = ImageIO.read(pic_url);
+			pic_url = this.getClass().getClassLoader().getResource("karten/4x.png");
+			x4 = ImageIO.read(pic_url);
+			pic_url = this.getClass().getClassLoader().getResource("karten/5x.png");
+			x5 = ImageIO.read(pic_url);
 			pic_url = this.getClass().getClassLoader().getResource("karten/backside.png");
 			backside = ImageIO.read(pic_url);
+			pic_url = this.getClass().getClassLoader().getResource("karten/bank.png");
+			bank = ImageIO.read(pic_url);
 			pic_url = this.getClass().getClassLoader().getResource("karten/wuerfel.png");
 			zählstrategie = ImageIO.read(pic_url);
 			pic_url = this.getClass().getClassLoader().getResource("karten/50.png");
@@ -173,5 +189,32 @@ public class Texturen {
 		return zählstrategie;
 	}
 
+	public BufferedImage getBank() {
+		return bank;
+	}
+
+	public BufferedImage getAllIn() {
+		return allIn;
+	}
+
+	public BufferedImage getX2() {
+		return x2;
+	}
+
+	public BufferedImage getX3() {
+		return x3;
+	}
+
+	public BufferedImage getX4() {
+		return x4;
+	}
+
+	public BufferedImage getX5() {
+		return x5;
+	}
+
+	public BufferedImage getX1() {
+		return x1;
+	}
 
 }

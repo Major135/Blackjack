@@ -1,6 +1,11 @@
 package main;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 
 public class Blackjack {
@@ -19,6 +24,8 @@ public class Blackjack {
 	private boolean gewonnen, zählsichtbar;
 	private int zwischenSumme;
 	private int x1, y50, y100, y500;
+	private Ablagestapel ablage;
+	private int allIn;
 
 	public static void main(String[] args) {
 		new Blackjack();
@@ -36,18 +43,14 @@ public class Blackjack {
 		chips[1] = new Chips(texturen.getChip100(), 50, 200, 100);
 		chips[2] = new Chips(texturen.getChip500(), 50, 400, 500);
 		chipliste = new ArrayList<Chips>();
-		zähl = new Zählstrategie(null, this, texturen.getZählstrategie(), 1000, 20);
 		spieler = new ArrayList<Spieler>();
+		zähl = new Zählstrategie(null, this, texturen.getZählstrategie(), 1000, 50);
 		gui = new Gui(this);
 		zwischenSumme = 0;
 		y50 = 425;
 		y100 = 425;
 		y500 = 425;
 		x1 = 485;
-	}
-
-	private void neuerSpieler() {
-		spieler.add(new Spieler(this, 1, "Hans", deck, 2));
 	}
 
 	private void spielStart() {
@@ -57,6 +60,10 @@ public class Blackjack {
 		spieler.add(dealer);
 		neuerSpieler();
 
+	}
+
+	private void neuerSpieler() {
+		spieler.add(new Spieler(this, 1, "Hans", deck, 2));
 	}
 
 	public void neuesSpiel() {
@@ -86,12 +93,12 @@ public class Blackjack {
 				setBankLabel(spieler.get(1).getGeld());
 			}
 			if (!chipliste.isEmpty()) {
-				chipliste.get(chipliste.size() - 1).setHeight(85);
-				chipliste.get(chipliste.size() - 1).setWidth(100);
+				chipliste.get(chipliste.size() - 1).setHeight(105);
+				chipliste.get(chipliste.size() - 1).setWidth(120);
 			}
-
 		} else {
 			zähl.trefferBoxGetroffen(x, y);
+			gui.trefferBoxGetroffen(x, y);
 		}
 
 	}
@@ -107,40 +114,32 @@ public class Blackjack {
 	}
 
 	private void ermittleSieger() {
-		if (spieler.get(1).getSumme() > 21) {
+		if (spieler.get(1).getSumme() == 21) {
+			gewonnen();
+		}
+		if (spieler.get(0).getSumme() <= 21 && spieler.get(0).getSumme() > spieler.get(1).getSumme()
+				|| spieler.get(0).getSumme() <= 21 && spieler.get(1).getSumme() > 21) {
 			verloren();
 		}
-		if (spieler.get(0).getSumme() <= 21 && spieler.get(0).getSumme() > spieler.get(1).getSumme()) {
-			verloren();
-		}
-		if (spieler.get(0).getSumme() == spieler.get(1).getSumme()) {
-			gui.getDealerLbl().setText("Unentschieden " + String.valueOf(spieler.get(0).getSumme()));
-			gui.getSpielerLbl().setText("Unentschieden " + String.valueOf(spieler.get(1).getSumme()));
+		if (spieler.get(0).getSumme() == spieler.get(1).getSumme() && spieler.get(1).getSumme() < 21) {
+			unentschieden();
 			einsatzAusloeschen();
 		}
 		if (spieler.get(0).getSumme() < spieler.get(1).getSumme() && spieler.get(1).getSumme() <= 21) {
 			gewonnen();
 		}
-
+		if (spieler.get(0).getSumme() > 21 && spieler.get(1).getSumme() <= 21) {
+			gewonnen();
+		}
+		if (spieler.get(0).getSumme() > 21 && spieler.get(1).getSumme() > 21) {
+			unentschieden();
+			einsatzAusloeschen();
+		}
 		setBankLabel(spieler.get(1).getGeld());
 	}
 
-	private void verloren() {
-		gui.getDealerLbl().setText("Gewonnen " + String.valueOf(spieler.get(0).getSumme()));
-		gui.getSpielerLbl().setText("Verloren " + String.valueOf(spieler.get(1).getSumme()));
-		setGewonnen(false);
-		spieler.get(1).chipsGewonnen();
-	}
-
-//STRG 1 für Extracted
-	private void gewonnen() {
-		gui.getDealerLbl().setText("Verloren " + String.valueOf(spieler.get(0).getSumme()));
-		gui.getSpielerLbl().setText("Gewonnen " + String.valueOf(spieler.get(1).getSumme()));
-		setGewonnen(true);
-		spieler.get(1).chipsGewonnen();
-	}
-
 	public void render(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
 		for (int i = 0; i < chips.length; i++) {
 			chips[i].render(g);
 		}
@@ -152,8 +151,44 @@ public class Blackjack {
 			g.drawImage(texturen.getBackside(), 485, 700, 125, 181, null);
 			g.drawImage(texturen.getBackside(), 505, 700, 125, 181, null);
 		}
-
+		if (spieler.get(1).getGeld() == 0) {
+			g.drawImage(texturen.getBank(), 25, 855, 180, 75, null);
+		} else if (spieler.get(1).getGeld() < 1000) {
+			g.drawImage(texturen.getBank(), 25, 855, 225, 75, null);
+		} else if (spieler.get(1).getGeld() < 10000) {
+			g.drawImage(texturen.getBank(), 25, 855, 250, 75, null);
+		}
+		if (spieler.get(1).getGeld() >= 10000) {
+			g.drawImage(texturen.getBank(), 25, 855, 275, 75, null);
+		}
 		zähl.render(g);
+		switch (zwischenSumme) {
+		case 2 , 3: {
+			g.drawImage(texturen.getX2(), 300, 870, 50, 50, null);
+			break;
+		}
+		case 4 , 5: {
+			g.drawImage(texturen.getX3(), 300, 870, 50, 50, null);
+			break;
+		}
+		case 6 , 7: {
+			g.drawImage(texturen.getX4(), 300, 870, 50, 50, null);
+			break;
+		}
+		case 8 , 9: {
+			g.drawImage(texturen.getX5(), 300, 870, 50, 50, null);
+			break;
+		}
+		default:
+			g.drawImage(texturen.getX1(), 300, 870, 50, 50, null);
+			break;
+		}
+		double rotationRequired = Math.toRadians(90);
+		g2d.rotate(rotationRequired, 1000 + 125 / 2, 320 + 181 / 2);
+		g2d.translate(950, 320);
+		g2d.drawImage(texturen.getBackside(), null, 0, 0);
+		g2d.dispose();
+
 	}
 
 	public ArrayList<Spieler> getSpieler() {
@@ -183,6 +218,26 @@ public class Blackjack {
 	public void einsatzBestaetigt() {
 		spieler.get(0).updateLabel();
 		spieler.get(1).updateLabel();
+	}
+
+	private void unentschieden() {
+		gui.getDealerLbl().setText("Unentschieden " + String.valueOf(spieler.get(0).getSumme()));
+		gui.getSpielerLbl().setText("Unentschieden " + String.valueOf(spieler.get(1).getSumme()));
+	}
+
+	private void verloren() {
+		gui.getDealerLbl().setText("Gewonnen " + String.valueOf(spieler.get(0).getSumme()));
+		gui.getSpielerLbl().setText("Verloren " + String.valueOf(spieler.get(1).getSumme()));
+		setGewonnen(false);
+		spieler.get(1).chipsGewonnen();
+	}
+
+//STRG 1 für Extracted
+	private void gewonnen() {
+		gui.getDealerLbl().setText("Verloren " + String.valueOf(spieler.get(0).getSumme()));
+		gui.getSpielerLbl().setText("Gewonnen " + String.valueOf(spieler.get(1).getSumme()));
+		setGewonnen(true);
+		spieler.get(1).chipsGewonnen();
 	}
 
 	public Deck getDeck(int pos) {
@@ -248,4 +303,9 @@ public class Blackjack {
 		gui.getZählstrategie().setVisible(false);
 		zählsichtbar = false;
 	}
+
+	public void setZwischenSumme(int zwischenSumme) {
+		this.zwischenSumme = zwischenSumme;
+	}
+
 }

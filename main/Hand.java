@@ -7,7 +7,7 @@ public class Hand {
 	private ArrayList<Karten> handkarten;
 	private Spieler spieler;
 	private ArrayList<Deck> deck;
-	private int counter = 2;
+	private int zähler = 2;
 	private int summe = 0;
 	private boolean assWert = false;
 
@@ -49,7 +49,7 @@ public class Hand {
 			berechneSumme();
 //			System.out.println("SpielerSumme" + summe);
 			deck.get(0).deleteKarte(0);
-			counter++;
+			zähler++;
 		}
 	}
 	
@@ -61,7 +61,7 @@ public class Hand {
 			berechneSumme();
 //			System.out.println("DealerSumme" + summe);
 			deck.get(0).deleteKarte(0);
-			counter++;
+			zähler++;
 		}
 	}
 	

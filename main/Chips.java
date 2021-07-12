@@ -1,13 +1,12 @@
 package main;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Chips {
 	private BufferedImage tex;
-	private int width, height; // Klassenattribute
+	private int width, height;
 	private int x, y;
 	private Rectangle hitbox;
 	private int wert;
@@ -24,7 +23,7 @@ public class Chips {
 
 	public void render(Graphics g) {
 		g.drawImage(tex, x, y, width, height, null);
-		Graphics2D g2d = (Graphics2D) g;
+//		Graphics2D g2d = (Graphics2D) g;
 //		g2d.draw(hitbox); //Hitbox für die Chips
 	}
 

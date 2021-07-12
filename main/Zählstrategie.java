@@ -37,16 +37,16 @@ public class Zählstrategie {
 		for (int i = 0; i < hand.getHand().size(); i++) {
 			if (hand.getHand().get(i).getWert() < 7 && !hand.isAssWert()) {
 				zähler += 1;
-				System.out.println("ZählStrategie KLEINER 7 (+1) " + zähler);
+				System.out.println("Kartenzahl kleiner 7 (+1) " + zähler);
 			}
 			if (hand.getHand().get(i).getWert() > 9) {
 				zähler -= 1;
-				System.out.println("ZählStrategie Größer 9 (-1) " + zähler);
+				System.out.println("Kartenzahl Größer 9 (-1) " + zähler);
 			}
 			if (hand.isAssWert()) {
-				zähler -= 1;
+				zähler -= 1;	
 				hand.setAssWert(false);
-				System.out.println("ASSWERT (-1)" + zähler);
+				System.out.println("Ass (-1)" + zähler);
 			}
 		}
 		return zähler;
@@ -62,7 +62,7 @@ public class Zählstrategie {
 
 	public void render(Graphics g) {
 		g.drawImage(tex, x, y, width, height, null);
-		Graphics2D g2d = (Graphics2D) g;
+//		Graphics2D g2d = (Graphics2D) g;
 //		g2d.draw(hitbox); // Hitbox von Zählstrategie Button
 		if (da) {
 //			g2d.draw(rect);  // Mousecursor 

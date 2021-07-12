@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class Spieler {
@@ -12,9 +13,10 @@ public class Spieler {
 	protected int x, y;
 	protected int anzahl;
 	protected boolean stand;
-	private int einsatz, geld, gesamteinsatz;
+	private int geld, gesamteinsatz;
 	private Zählstrategie zähl;
 	private int zählsumme;
+
 
 	public Spieler(Blackjack blackjack, int pSpielerId, String pName, ArrayList<Deck> deck, int pAnzahl) {
 		this.spielerId = pSpielerId;
@@ -29,10 +31,11 @@ public class Spieler {
 		hand = new Hand(this, deck);
 		zähl = new Zählstrategie(hand, blackjack, null, 1000,20);
 		y = 700;
-		geld = 1000;
+		geld = 8000;
 		gesamteinsatz = 0;
 		ziehen(anzahl);
 		stand = false;
+
 	}
 
 	public void zug() {
@@ -42,7 +45,7 @@ public class Spieler {
 		}
 
 	}
-
+	
 	public int einsatzMachen(int einsatz) {
 		if (geld-einsatz>=0) {
 			gesamteinsatz += einsatz;
